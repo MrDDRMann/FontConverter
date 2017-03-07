@@ -59,11 +59,8 @@ namespace FontConverter
         }
 
         public void DrawImage(List<FontFamily> fontsFamilies, int index, string path, int fontsize, FontStyle fontStyle, Color background,
-                Color forground, char[] allChar)
+                Color forground, char Char, int i)
         {
-            int i = 0;
-            foreach (char printableChar in allChar)
-            {
                 using (Bitmap b = new Bitmap(500, 500))
                 {
                     using (Graphics g = Graphics.FromImage(b))
@@ -73,7 +70,7 @@ namespace FontConverter
                             Font font = new Font(fontsFamilies[index], fontsize, fontStyle,
                                 GraphicsUnit.Pixel))
                         {
-                            SizeF size = GetStringSize(printableChar.ToString(), font, g);
+                            SizeF size = GetStringSize(Char.ToString(), font, g);
                             using (Bitmap bitmap = new Bitmap((int) size.Width, (int) size.Height))
                             {
                                 using (Graphics graphics = Graphics.FromImage(bitmap))
@@ -85,7 +82,7 @@ namespace FontConverter
                                         graphics.CompositingQuality = CompositingQuality.HighQuality;
                                         graphics.SmoothingMode = SmoothingMode.AntiAlias;
                                         graphics.TextRenderingHint = TextRenderingHint.AntiAlias;
-                                        graphics.DrawString(printableChar.ToString(), font, solidBrush,
+                                        graphics.DrawString(Char.ToString(), font, solidBrush,
                                             new PointF(0, 0));
                                         bitmap.Save(path + "\\" + i + ".png", ImageFormat.Png);
                                         bitmap.Dispose();
@@ -97,8 +94,6 @@ namespace FontConverter
                         b.Dispose();
                         g.Dispose();
                     }
-                }
-                i++;
             }
         }
     }

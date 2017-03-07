@@ -4,11 +4,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-        mc:Ignorable="d" Height="270" Width="380" Title="FontConverter" MinHeight="270" MinWidth="370">
+        mc:Ignorable="d" Height="295" Width="380" Title="FontConverter" MinHeight="295" MinWidth="380">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="4*"/>
             <ColumnDefinition Width="*"/>
+            
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="25"/>
@@ -18,6 +19,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="25"/>
         </Grid.RowDefinitions>
 
         <Menu x:Name="Menu" Height="25" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
@@ -33,26 +35,37 @@
         <Button x:Name="BtOpen" Content="Open" Margin="5,3" Click="btOpen_Click" Grid.Row="3" Grid.Column="1" Width="60" HorizontalAlignment="Right"/>
         <TextBox x:Name="TbPath" Margin="10,3" TextWrapping="NoWrap"  Text="TextBox" VerticalAlignment="Stretch" Loaded="tbPath_Loaded" Grid.Row="4" Grid.Column="0"/>
         <Button x:Name="BtBrowse" Content="Browse" Margin="5,3" Click="BtBrowse_OnClick" Grid.Row="4" Grid.Column="1" Width="60" HorizontalAlignment="Right"/>
-        <Grid Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-            <TextBlock Margin="10,3,0,3" Grid.Row="0" Grid.Column="0" Text="Foreground"/>
-            <xctk:ColorPicker x:Name="CpForeground"  Grid.Row="1" Grid.Column="0" Margin="10,3,10,3" SelectedColorChanged="CpForeground_OnSelectedColorChanged" SelectedColor="Black" Loaded="CpForeground_OnLoaded"/>
-            <TextBlock Margin="10,3,0,3" Grid.Row="0" Grid.Column="1" Text="Background"/>
-            <xctk:ColorPicker x:Name="CpBackground"  Grid.Row="1" Grid.Column="1" Margin="10,3,10,3" SelectedColorChanged="CpBackground_OnSelectedColorChanged" SelectedColor="Transparent" Loaded="CpBackground_OnLoaded"/>
-            <TextBlock Margin="10,3,0,3" Grid.Row="2" Grid.Column="0" Text="Font Size"/>
-            <xctk:IntegerUpDown x:Name="UdSize" Grid.Row="3" Grid.Column="0" Margin="10,3,0,3" FormatString="D" Width="80" HorizontalAlignment="Left" Maximum="2048" Minimum="8" ValueChanged="UdSize_OnValueChanged" Loaded="UdSize_OnLoaded" Watermark="Default 50"/>
-            <TextBlock Margin="10,3,0,3" Grid.Row="2" Grid.Column="1" Text="Font Style"/>
+            <Grid Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <TextBlock Margin="10,3,0,3" Grid.Row="0" Grid.Column="0" Text="Foreground"/>
+                <xctk:ColorPicker x:Name="CpForeground"  Grid.Row="1" Grid.Column="0" Margin="10,3,10,3" SelectedColorChanged="CpForeground_OnSelectedColorChanged" SelectedColor="Black" Loaded="CpForeground_OnLoaded"/>
+                <TextBlock Margin="10,3,0,3" Grid.Row="0" Grid.Column="1" Text="Background"/>
+                <xctk:ColorPicker x:Name="CpBackground"  Grid.Row="1" Grid.Column="1" Margin="10,3,10,3" SelectedColorChanged="CpBackground_OnSelectedColorChanged" SelectedColor="Transparent" Loaded="CpBackground_OnLoaded"/>
+                <TextBlock Margin="10,3,0,3" Grid.Row="2" Grid.Column="0" Text="Font Size"/>
+                <xctk:IntegerUpDown x:Name="UdSize" Grid.Row="3" Grid.Column="0" Margin="10,3,0,3" FormatString="D" Width="80" HorizontalAlignment="Left" Maximum="2048" Minimum="8" ValueChanged="UdSize_OnValueChanged" Loaded="UdSize_OnLoaded" Watermark="Default 50"/>
+                <TextBlock Margin="10,3,0,3" Grid.Row="2" Grid.Column="1" Text="Font Style"/>
             <ComboBox x:Name="CbStyle" Margin="10,3" Grid.Row="3" Grid.Column="1" Loaded="CbStyle_OnLoaded"/>
         </Grid>
+        <StatusBar Grid.Row="7" Height="25" Grid.Column="0" Grid.ColumnSpan="2">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <ProgressBar Name="ProgressBar" Height="18" Width="150" Grid.Column="0"/>
+                <TextBlock x:Name="tbPercent" Margin="10,0,0,0" Grid.Column="1" Text="0 %"/>
+            </Grid>
+        </StatusBar>
     </Grid>
 </Window>

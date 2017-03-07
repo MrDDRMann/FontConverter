@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Text;
@@ -14,20 +15,37 @@ using MessageBox = System.Windows.MessageBox;
 
 namespace FontConverter
 {
-    public partial class MainWindow : Window
+    public partial class MainWindow
     {
         private readonly Methods _methods = new Methods();
         private readonly List<FontStyle> _fontStyle = new List<FontStyle>();
+        private readonly BackgroundWorker _worker;
         private List<FontFamily> _fonts;
         private Color _forground;
         private Color _background;
         private int _fontsize;
+        private string _path;
+        private int _styleIndex;
+        private int _fontIndex;
 
         public MainWindow()
         {
             InitializeComponent();
+            _worker = new BackgroundWorker
+            {
+                WorkerReportsProgress = true,
+                WorkerSupportsCancellation = true
+            };
+            _worker.DoWork += WorkerOnDoWork;
+            _worker.ProgressChanged += WorkerOnProgressChanged;
+            _worker.RunWorkerCompleted += WorkerOnRunWorkerCompleted;
         }
 
+        /// <summary>
+        ///     Load Fonts
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void cbFonts_Loaded(object sender, RoutedEventArgs e)
         {
             Mouse.OverrideCursor = Cursors.Wait;
@@ -42,11 +60,21 @@ namespace FontConverter
             Mouse.OverrideCursor = null;
         }
 
+        /// <summary>
+        ///     Path for save directory
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void tbPath_Loaded(object sender, RoutedEventArgs e)
         {
             TbPath.Text = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
         }
 
+        /// <summary>
+        ///     Open path to convert font
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btOpen_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -62,15 +90,69 @@ namespace FontConverter
             }
         }
 
+        /// <summary>
+        ///     Convert font to picture
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btConvert_Click(object sender, RoutedEventArgs e)
+        {
+            Mouse.OverrideCursor = Cursors.Wait;
+            BtBrowse.IsEnabled = false;
+            BtOpen.IsEnabled = false;
+            BtConvert.IsEnabled = false;
+            tbPercent.Text = "0  %";
+            _fontIndex = CbFonts.SelectedIndex;
+            _styleIndex = CbStyle.SelectedIndex;
+            _path = _methods.CreatePath(_fonts, CbFonts.SelectedIndex, TbPath.Text, _fontsize, _fontStyle[CbStyle.SelectedIndex]);
+            char[] allChar = _methods.GetAllChar(_fonts, CbFonts.SelectedIndex);
+            _worker.RunWorkerAsync(allChar);
+        }
+
+        /// <summary>
+        ///     Worker completed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="runWorkerCompletedEventArgs"></param>
+        private void WorkerOnRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs runWorkerCompletedEventArgs)
+        {
+            Mouse.OverrideCursor = null;
+            BtBrowse.IsEnabled = true;
+            BtOpen.IsEnabled = true;
+            BtConvert.IsEnabled = true;
+            tbPercent.Text = "100 %";
+        }
+
+        /// <summary>
+        ///     Progresschanged event
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="progressChangedEventArgs"></param>
+        private void WorkerOnProgressChanged(object sender, ProgressChangedEventArgs progressChangedEventArgs)
+        {
+            ProgressBar.Value = progressChangedEventArgs.ProgressPercentage;
+            tbPercent.Text = $"{progressChangedEventArgs.ProgressPercentage} %";
+        }
+
+        /// <summary>
+        ///     Backgroundwoker main thread
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="doWorkEventArgs"></param>
+        private void WorkerOnDoWork(object sender, DoWorkEventArgs doWorkEventArgs)
         {
             try
             {
-                Mouse.OverrideCursor = Cursors.Wait;
-                string path = _methods.CreatePath(_fonts, CbFonts.SelectedIndex, TbPath.Text, _fontsize, _fontStyle[CbStyle.SelectedIndex]);
-                char[] allChar = _methods.GetAllChar(_fonts, CbFonts.SelectedIndex);
-                _methods.DrawImage(_fonts, CbFonts.SelectedIndex, path, _fontsize, _fontStyle[CbStyle.SelectedIndex], _background, _forground, allChar);
-                Mouse.OverrideCursor = null;
+                Methods methods = new Methods();
+                char[] allChar = (char[]) doWorkEventArgs.Argument;
+                int i = 0;
+                foreach (char c in allChar)
+                {
+                    methods.DrawImage(_fonts, _fontIndex, _path, _fontsize, _fontStyle[_styleIndex], _background, _forground, c, i);
+                    double percentage = (double)i/allChar.Length*100.0;
+                    _worker.ReportProgress((int)percentage);
+                    i++;
+                }
             }
             catch (Exception exc)
             {
@@ -79,18 +161,24 @@ namespace FontConverter
             }
         }
 
-        private
-            void MiClose_OnClick(object sender, RoutedEventArgs e)
+        /// <summary>
+        ///     Close Application
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MiClose_OnClick(object sender, RoutedEventArgs e)
         {
-            Application.Current.Shutdown
-                ();
+            Application.Current.Shutdown();
         }
 
+        /// <summary>
+        ///     Set backgroundcolor
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void CpBackground_OnSelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<System.Windows.Media.Color?> e)
         {
-            _background
-                =
-                Color.FromArgb
+            _background = Color.FromArgb
                     (
                         CpBackground.SelectedColor.Value.A
                         ,
@@ -102,11 +190,14 @@ namespace FontConverter
                     );
         }
 
+        /// <summary>
+        ///     Set foregroundcolor
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void CpForeground_OnSelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<System.Windows.Media.Color?> e)
         {
-            _forground
-                =
-                Color.FromArgb
+            _forground = Color.FromArgb
                     (
                         CpForeground.SelectedColor.Value.A
                         ,
@@ -118,47 +209,75 @@ namespace FontConverter
                     );
         }
 
+        /// <summary>
+        ///     Set fontsize
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void UdSize_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            if (
-                UdSize.Value == null)
+            if (UdSize.Value == null)
             {
-                _fontsize
-                    = 50;
+                _fontsize = 50;
             }
             else
             {
-                _fontsize
-                    = (
-                        int
-                        )
-                        UdSize.Value;
+                _fontsize = (int)UdSize.Value;
             }
         }
 
+        /// <summary>
+        ///     Load foregroundcolor
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void CpForeground_OnLoaded(object sender, RoutedEventArgs e)
         {
             _forground = Color.FromArgb(CpForeground.SelectedColor.Value.A, CpForeground.SelectedColor.Value.R,
                 CpForeground.SelectedColor.Value.G, CpForeground.SelectedColor.Value.B);
         }
 
+        /// <summary>
+        ///     Load backgroundcolor
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void CpBackground_OnLoaded(object sender, RoutedEventArgs e)
         {
             _background = Color.FromArgb(CpBackground.SelectedColor.Value.A, CpBackground.SelectedColor.Value.R,
                 CpBackground.SelectedColor.Value.G, CpBackground.SelectedColor.Value.B);
         }
 
+        /// <summary>
+        ///     Set default fontsize
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void UdSize_OnLoaded(object sender, RoutedEventArgs e)
         {
             _fontsize = 50;
         }
 
+        /// <summary>
+        ///     Show application version
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MiAbout_OnClick(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("FontConverter Version 1.2 \nNovember 2016\nAlexander Spindler", " About FontConverter",
+            System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
+            string programmName = assembly.GetName().Name;
+            string programmVersion = assembly.GetName().Version.ToString();
+            string programmDate = "März 2017";
+            MessageBox.Show($"{programmName} Version: {programmVersion} \n{programmDate}\nAlexander Spindler", $"About {programmName}",
                 MessageBoxButton.OK);
         }
 
+        /// <summary>
+        ///     Get path to save folder
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtBrowse_OnClick(object sender, RoutedEventArgs e)
         {
             FolderBrowserDialog objDialog = new FolderBrowserDialog
@@ -173,6 +292,11 @@ namespace FontConverter
             }
         }
 
+        /// <summary>
+        ///     Load styles
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void CbStyle_OnLoaded(object sender, RoutedEventArgs e)
         {
             CbStyle.Items.Add(System.Drawing.FontStyle.Regular.ToString());
