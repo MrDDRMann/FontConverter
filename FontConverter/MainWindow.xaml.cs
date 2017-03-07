@@ -8,6 +8,8 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
+using MahApps.Metro.Controls;
+using MahApps.Metro.Controls.Dialogs;
 using Application = System.Windows.Application;
 using Cursors = System.Windows.Input.Cursors;
 using FontStyle = System.Drawing.FontStyle;
@@ -15,7 +17,7 @@ using MessageBox = System.Windows.MessageBox;
 
 namespace FontConverter
 {
-    public partial class MainWindow
+    public partial class MainWindow : MetroWindow
     {
         private readonly Methods _methods = new Methods();
         private readonly List<FontStyle> _fontStyle = new List<FontStyle>();
@@ -75,7 +77,7 @@ namespace FontConverter
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void btOpen_Click(object sender, RoutedEventArgs e)
+        private async void btOpen_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -86,7 +88,8 @@ namespace FontConverter
             }
             catch (Exception exc)
             {
-                MessageBox.Show("Can't open folder. Please check your path.\n" + exc.Message, "FontConverter Error", MessageBoxButton.OK);
+                await this.ShowMessageAsync("FontConverter Error", "Can't open folder. Please check your path.\n" + exc.Message);
+                //MessageBox.Show("Can't open folder. Please check your path.\n" + exc.Message, "FontConverter Error", MessageBoxButton.OK);
             }
         }
 
@@ -139,7 +142,7 @@ namespace FontConverter
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="doWorkEventArgs"></param>
-        private void WorkerOnDoWork(object sender, DoWorkEventArgs doWorkEventArgs)
+        private async void WorkerOnDoWork(object sender, DoWorkEventArgs doWorkEventArgs)
         {
             try
             {
@@ -157,7 +160,8 @@ namespace FontConverter
             catch (Exception exc)
             {
                 Mouse.OverrideCursor = null;
-                MessageBox.Show("Can't convert font to picture\n" + exc.Message, "FontConverter Error", MessageBoxButton.OK);
+                await this.ShowMessageAsync("FontConverter Error", "Can't convert font to picture\n" + exc.Message);
+                //MessageBox.Show("Can't convert font to picture\n" + exc.Message, "FontConverter Error", MessageBoxButton.OK);
             }
         }
 
@@ -209,22 +213,17 @@ namespace FontConverter
                     );
         }
 
-        /// <summary>
-        ///     Set fontsize
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void UdSize_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
-        {
-            if (UdSize.Value == null)
-            {
-                _fontsize = 50;
-            }
-            else
-            {
-                _fontsize = (int)UdSize.Value;
-            }
-        }
+        //private void UdSize_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        //{
+        //    if (UdSize.Value == null)
+        //    {
+        //        _fontsize = 50;
+        //    }
+        //    else
+        //    {
+        //        _fontsize = (int)UdSize.Value;
+        //    }
+        //}
 
         /// <summary>
         ///     Load foregroundcolor
@@ -249,28 +248,18 @@ namespace FontConverter
         }
 
         /// <summary>
-        ///     Set default fontsize
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void UdSize_OnLoaded(object sender, RoutedEventArgs e)
-        {
-            _fontsize = 50;
-        }
-
-        /// <summary>
         ///     Show application version
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void MiAbout_OnClick(object sender, RoutedEventArgs e)
+        private async void MiAbout_OnClick(object sender, RoutedEventArgs e)
         {
             System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
             string programmName = assembly.GetName().Name;
             string programmVersion = assembly.GetName().Version.ToString();
             string programmDate = "März 2017";
-            MessageBox.Show($"{programmName} Version: {programmVersion} \n{programmDate}\nAlexander Spindler", $"About {programmName}",
-                MessageBoxButton.OK);
+            await this.ShowMessageAsync($"About {programmName}", $"{programmName} Version: {programmVersion} \n{programmDate}\nAlexander Spindler");
+            //MessageBox.Show($"{programmName} Version: {programmVersion} \n{programmDate}\nAlexander Spindler", $"About {programmName}", MessageBoxButton.OK);
         }
 
         /// <summary>
@@ -310,6 +299,34 @@ namespace FontConverter
             CbStyle.Items.Add(System.Drawing.FontStyle.Underline.ToString());
             _fontStyle.Add(System.Drawing.FontStyle.Underline);
             CbStyle.SelectedIndex = 0;
+        }
+
+        /// <summary>
+        ///     Set fontsize
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void UdSize_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<double?> e)
+        {
+            if (UdSize.Value == null)
+            {
+                _fontsize = 50;
+            }
+            else
+            {
+                _fontsize = (int)UdSize.Value;
+            }
+        }
+
+        /// <summary>
+        ///     Set default fontsize
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void UdSize_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            _fontsize = 50;
+            UdSize.Value = 50;
         }
     }
 }

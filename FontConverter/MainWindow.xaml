@@ -1,10 +1,11 @@
-﻿<Window x:Class="FontConverter.MainWindow"
+﻿<Controls:MetroWindow x:Class="FontConverter.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-        mc:Ignorable="d" Height="295" Width="380" Title="FontConverter" MinHeight="295" MinWidth="380">
+        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        mc:Ignorable="d" Height="315" Width="450" Title="FontConverter" MinHeight="315" MinWidth="450">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="4*"/>
@@ -12,29 +13,29 @@
             
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="25"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="25"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <Menu x:Name="Menu" Height="25" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
-            <MenuItem Height="25" Header="Programm">
+        <Menu x:Name="Menu" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
+            <MenuItem Height="30" Header="Programm">
                 <MenuItem x:Name="MiClose" Header="Close" Click="MiClose_OnClick"/>
                 <MenuItem x:Name="MiAbout" Header="About" Click="MiAbout_OnClick"/>
             </MenuItem>
         </Menu>
         <TextBlock HorizontalAlignment="Left" Margin="10,3,0,3" TextWrapping="Wrap" Text="Fonts" Grid.Row="1" Grid.Column="0"/>
         <ComboBox x:Name="CbFonts"  Margin="10,3,0,3" HorizontalAlignment="Left" Width="180" Loaded="cbFonts_Loaded" Grid.Row="2" Grid.Column="0"/>
-        <Button x:Name="BtConvert" Content="Convert"  Click="btConvert_Click" Grid.Row="2" Grid.Column="1" Margin="5,3" Width="60" HorizontalAlignment="Right"/>
+        <Button x:Name="BtConvert" Content="Convert"  Click="btConvert_Click" Grid.Row="2" Grid.Column="1" Margin="5,3" Width="80" HorizontalAlignment="Right"/>
         <TextBlock Margin="10,3,0,3" TextWrapping="Wrap" Text="PNG Output Path" Grid.Row="3" Grid.Column="0"/>
-        <Button x:Name="BtOpen" Content="Open" Margin="5,3" Click="btOpen_Click" Grid.Row="3" Grid.Column="1" Width="60" HorizontalAlignment="Right"/>
+        <Button x:Name="BtOpen" Content="Open" Margin="5,3" Click="btOpen_Click" Grid.Row="3" Grid.Column="1" Width="80" HorizontalAlignment="Right"/>
         <TextBox x:Name="TbPath" Margin="10,3" TextWrapping="NoWrap"  Text="TextBox" VerticalAlignment="Stretch" Loaded="tbPath_Loaded" Grid.Row="4" Grid.Column="0"/>
-        <Button x:Name="BtBrowse" Content="Browse" Margin="5,3" Click="BtBrowse_OnClick" Grid.Row="4" Grid.Column="1" Width="60" HorizontalAlignment="Right"/>
+        <Button x:Name="BtBrowse" Content="Browse" Margin="5,3" Click="BtBrowse_OnClick" Grid.Row="4" Grid.Column="1" Width="80" HorizontalAlignment="Right"/>
             <Grid Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -52,7 +53,8 @@
                 <TextBlock Margin="10,3,0,3" Grid.Row="0" Grid.Column="1" Text="Background"/>
                 <xctk:ColorPicker x:Name="CpBackground"  Grid.Row="1" Grid.Column="1" Margin="10,3,10,3" SelectedColorChanged="CpBackground_OnSelectedColorChanged" SelectedColor="Transparent" Loaded="CpBackground_OnLoaded"/>
                 <TextBlock Margin="10,3,0,3" Grid.Row="2" Grid.Column="0" Text="Font Size"/>
-                <xctk:IntegerUpDown x:Name="UdSize" Grid.Row="3" Grid.Column="0" Margin="10,3,0,3" FormatString="D" Width="80" HorizontalAlignment="Left" Maximum="2048" Minimum="8" ValueChanged="UdSize_OnValueChanged" Loaded="UdSize_OnLoaded" Watermark="Default 50"/>
+                <Controls:NumericUpDown Name="UdSize" Minimum="8" Grid.Row="3" Grid.Column="0" Margin="10,3" Interval="1" ValueChanged="UdSize_OnValueChanged" Loaded="UdSize_OnLoaded" VerticalContentAlignment="Stretch" IsReadOnly="True"/>
+                <!--<xctk:IntegerUpDown x:Name="UdSize" Grid.Row="3" Grid.Column="0" Margin="10,3,0,3" FormatString="D" Width="80" HorizontalAlignment="Left" Maximum="2048" Minimum="8" ValueChanged="UdSize_OnValueChanged" Loaded="UdSize_OnLoaded" Watermark="Default 50"/>-->
                 <TextBlock Margin="10,3,0,3" Grid.Row="2" Grid.Column="1" Text="Font Style"/>
             <ComboBox x:Name="CbStyle" Margin="10,3" Grid.Row="3" Grid.Column="1" Loaded="CbStyle_OnLoaded"/>
         </Grid>
@@ -68,4 +70,4 @@
             </Grid>
         </StatusBar>
     </Grid>
-</Window>
+</Controls:MetroWindow>
