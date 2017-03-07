@@ -54,7 +54,6 @@
                 <xctk:ColorPicker x:Name="CpBackground"  Grid.Row="1" Grid.Column="1" Margin="10,3,10,3" SelectedColorChanged="CpBackground_OnSelectedColorChanged" SelectedColor="Transparent" Loaded="CpBackground_OnLoaded"/>
                 <TextBlock Margin="10,3,0,3" Grid.Row="2" Grid.Column="0" Text="Font Size"/>
                 <Controls:NumericUpDown Name="UdSize" Minimum="8" Grid.Row="3" Grid.Column="0" Margin="10,3" Interval="1" ValueChanged="UdSize_OnValueChanged" Loaded="UdSize_OnLoaded" VerticalContentAlignment="Stretch" IsReadOnly="True"/>
-                <!--<xctk:IntegerUpDown x:Name="UdSize" Grid.Row="3" Grid.Column="0" Margin="10,3,0,3" FormatString="D" Width="80" HorizontalAlignment="Left" Maximum="2048" Minimum="8" ValueChanged="UdSize_OnValueChanged" Loaded="UdSize_OnLoaded" Watermark="Default 50"/>-->
                 <TextBlock Margin="10,3,0,3" Grid.Row="2" Grid.Column="1" Text="Font Style"/>
             <ComboBox x:Name="CbStyle" Margin="10,3" Grid.Row="3" Grid.Column="1" Loaded="CbStyle_OnLoaded"/>
         </Grid>

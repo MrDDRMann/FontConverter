@@ -13,7 +13,6 @@ using MahApps.Metro.Controls.Dialogs;
 using Application = System.Windows.Application;
 using Cursors = System.Windows.Input.Cursors;
 using FontStyle = System.Drawing.FontStyle;
-using MessageBox = System.Windows.MessageBox;
 
 namespace FontConverter
 {
@@ -212,18 +211,6 @@ namespace FontConverter
                         CpForeground.SelectedColor.Value.B
                     );
         }
-
-        //private void UdSize_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
-        //{
-        //    if (UdSize.Value == null)
-        //    {
-        //        _fontsize = 50;
-        //    }
-        //    else
-        //    {
-        //        _fontsize = (int)UdSize.Value;
-        //    }
-        //}
 
         /// <summary>
         ///     Load foregroundcolor
