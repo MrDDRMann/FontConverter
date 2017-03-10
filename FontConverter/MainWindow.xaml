@@ -8,9 +8,10 @@
         mc:Ignorable="d" Height="315" Width="450" Title="FontConverter" ResizeMode="CanMinimize">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="4*"/>
+            <ColumnDefinition Width="2*"/>
             <ColumnDefinition Width="*"/>
-            
+            <ColumnDefinition Width="*"/>
+
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -29,14 +30,20 @@
                 <MenuItem x:Name="MiAbout" Header="About" Click="MiAbout_OnClick"/>
             </MenuItem>
         </Menu>
+        
         <TextBlock HorizontalAlignment="Left" Margin="10,3,0,3" TextWrapping="Wrap" Text="Fonts" Grid.Row="1" Grid.Column="0"/>
-        <ComboBox x:Name="CbFonts"  Margin="10,3,0,3" HorizontalAlignment="Left" Width="180" Loaded="cbFonts_Loaded" Grid.Row="2" Grid.Column="0"/>
-        <Button x:Name="BtConvert" Content="Convert"  Click="btConvert_Click" Grid.Row="2" Grid.Column="1" Margin="5,3" Width="80" HorizontalAlignment="Right"/>
+        <ComboBox x:Name="CbFonts"  Margin="10,3,0,3" HorizontalAlignment="Left" Width="180" Loaded="cbFonts_Loaded" SelectionChanged="CbFonts_SelectionChanged" Grid.Row="2" Grid.Column="0"  />
+
+        <TextBlock HorizontalAlignment="Left" Margin="0, 3, 10, 3" Text="Preview" Grid.Row="1" Grid.Column="1"/>
+        <TextBlock HorizontalAlignment="Left" TextAlignment="Center" x:Name="previewTextBlock" Margin="0, 3, 10, 3" Text="&#x0031;&#x0041;&#x0061;&#10;&#xE122;&#xE128;&#xE990;" FontSize="16" Grid.Column="1" Grid.Row="2" Grid.RowSpan="2"/>
+
+        <Button x:Name="BtConvert" Content="Convert"  Click="btConvert_Click" Grid.Row="2" Grid.Column="2" Margin="5,3" Width="80" HorizontalAlignment="Right"/>
+        <Button x:Name="BtOpen" Content="Open" Margin="5,3" Click="btOpen_Click" Grid.Row="3" Grid.Column="2" Width="80" HorizontalAlignment="Right"/>
+        <Button x:Name="BtBrowse" Content="Browse" Margin="5,3" Click="BtBrowse_OnClick" Grid.Row="4" Grid.Column="2" Width="80" HorizontalAlignment="Right"/>
+        
         <TextBlock Margin="10,3,0,3" TextWrapping="Wrap" Text="PNG Output Path" Grid.Row="3" Grid.Column="0"/>
-        <Button x:Name="BtOpen" Content="Open" Margin="5,3" Click="btOpen_Click" Grid.Row="3" Grid.Column="1" Width="80" HorizontalAlignment="Right"/>
-        <TextBox x:Name="TbPath" Margin="10,3" TextWrapping="NoWrap"  Text="TextBox" VerticalAlignment="Stretch" Loaded="tbPath_Loaded" Grid.Row="4" Grid.Column="0"/>
-        <Button x:Name="BtBrowse" Content="Browse" Margin="5,3" Click="BtBrowse_OnClick" Grid.Row="4" Grid.Column="1" Width="80" HorizontalAlignment="Right"/>
-            <Grid Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="2">
+        <TextBox x:Name="TbPath" Margin="10,3" TextWrapping="NoWrap"  Text="TextBox" VerticalAlignment="Stretch" Loaded="tbPath_Loaded" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2"/>
+        <Grid Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="3">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
@@ -55,9 +62,9 @@
                 <TextBlock Margin="10,3,0,3" Grid.Row="2" Grid.Column="0" Text="Font Size"/>
                 <Controls:NumericUpDown Name="UdSize" Minimum="8" Maximum="2048" Grid.Row="3" Grid.Column="0" Margin="10,3" Interval="1" ValueChanged="UdSize_OnValueChanged" Loaded="UdSize_OnLoaded" VerticalContentAlignment="Stretch"/>
                 <TextBlock Margin="10,3,0,3" Grid.Row="2" Grid.Column="1" Text="Font Style"/>
-            <ComboBox x:Name="CbStyle" Margin="10,3" Grid.Row="3" Grid.Column="1" Loaded="CbStyle_OnLoaded"/>
+            <ComboBox x:Name="CbStyle" Margin="10,3" Grid.Row="3" Grid.Column="1" Loaded="CbStyle_OnLoaded" SelectionChanged="CbStyle_SelectionChanged"/>
         </Grid>
-        <StatusBar Grid.Row="7" Height="25" Grid.Column="0" Grid.ColumnSpan="2">
+        <StatusBar Grid.Row="7" Height="25" Grid.Column="0" Grid.ColumnSpan="3">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>

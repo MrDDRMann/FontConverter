@@ -191,6 +191,8 @@ namespace FontConverter
                         ,
                         CpBackground.SelectedColor.Value.B
                     );
+            //Converting again from ARGB because _background has the wrong type
+            previewTextBlock.Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(CpBackground.SelectedColor.Value.A, CpBackground.SelectedColor.Value.R, CpBackground.SelectedColor.Value.G, CpBackground.SelectedColor.Value.B));
         }
 
         /// <summary>
@@ -210,6 +212,8 @@ namespace FontConverter
                         ,
                         CpForeground.SelectedColor.Value.B
                     );
+            //Converting again from ARGB because _forground has the wrong type
+            previewTextBlock.Foreground = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(CpForeground.SelectedColor.Value.A, CpForeground.SelectedColor.Value.R, CpForeground.SelectedColor.Value.G, CpForeground.SelectedColor.Value.B));
         }
 
         /// <summary>
@@ -314,6 +318,44 @@ namespace FontConverter
         {
             _fontsize = 50;
             UdSize.Value = 50;
+        }
+
+        /// <summary>
+        ///     Synchronize preview font with chosen font
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CbFonts_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            previewTextBlock.FontFamily = new System.Windows.Media.FontFamily((string) CbFonts.SelectedValue);
+        }
+
+        /// <summary>
+        ///     Synchronize preview font style with chosen font style
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CbStyle_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            previewTextBlock.TextDecorations = null;
+            previewTextBlock.FontWeight = FontWeights.Normal;
+            previewTextBlock.FontStyle = FontStyles.Normal;
+
+            switch (CbStyle.SelectedValue)
+            {
+                case "Italic":
+                    previewTextBlock.FontStyle = FontStyles.Italic;
+                    break;
+                case "Bold":
+                    previewTextBlock.FontWeight = FontWeights.Bold;
+                    break;
+                case "Underline":
+                    previewTextBlock.TextDecorations = TextDecorations.Underline;
+                    break;
+                case "Strikeout":
+                    previewTextBlock.TextDecorations = TextDecorations.Strikethrough;
+                    break;
+            }
         }
     }
 }
