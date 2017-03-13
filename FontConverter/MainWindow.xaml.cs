@@ -341,7 +341,7 @@ namespace FontConverter
             previewTextBlock.FontWeight = FontWeights.Normal;
             previewTextBlock.FontStyle = FontStyles.Normal;
 
-            switch (CbStyle.SelectedValue)
+            switch ((string)CbStyle.SelectedValue)
             {
                 case "Italic":
                     previewTextBlock.FontStyle = FontStyles.Italic;
